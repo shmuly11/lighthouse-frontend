@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.request-list{
+  background-color: aqua;
+  border: aquamarine;
+  margin: auto;
+  width: 30%;
+  border: 1px solid green;
+  padding: 10px;
+  
+}

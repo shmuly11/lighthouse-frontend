@@ -10,18 +10,49 @@ import {
   } from 'react-swipeable-list';
   import 'react-swipeable-list/dist/styles.css';
   import RequestCard from './RequestCard'
+  import {useSelector, useDispatch} from 'react-redux'
+  import {addOffer} from './redux/offersSlice'
 
  
 
 function Request({request}) {
+  const user = useSelector(state => state.user)
+  const dispatch = useDispatch()
+  const {id, assigned, content, end_date, start_date, location, member_name, time, url, member_id} = request
+  const form = {
+    new_offer: {...request, 
+    assigned: true,
+    offer: true,
+    member_id: user.id
+    },
+    new_assigned:{
+      member_id,
+      member1_id: user.id,
+      request_id: id
+    }
+  }
 
-
-
+   function handleAccept(){
+     if(user.id !== member_id){
+     fetch('http://localhost:3000/request_offers/new_offer',{
+       method: "POST",
+       headers:{
+         'Content-Type': 'application/json'
+       },
+       body: JSON.stringify(form)
+     })
+     .then(res => res.json())
+     .then(data=>{
+       console.log(data)
+       dispatch(addOffer(data))
+     })
+    }
+   }
 
     const leadingActions = () => (
         <LeadingActions>
-          <SwipeAction onClick={() => console.info('swipe action triggered')}>
-            Action name
+          <SwipeAction onClick={handleAccept}>
+            Accept Offer
           </SwipeAction>
         </LeadingActions>
       );

@@ -16,6 +16,10 @@ import {useHistory} from 'react-router-dom'
 import {GiLighthouse} from 'react-icons/gi'
 import { useSelector, useDispatch } from 'react-redux'
 import {setUser} from './redux/userSlice'
+import Modal from '@material-ui/core/Modal';
+import Signup from "./Signup";
+
+
 
 
 function Copyright() {
@@ -60,6 +64,19 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  modal_body: {
+    height: 500,
+    width: 800,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3)
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 }));
 
 
@@ -73,7 +90,17 @@ function Login() {
     const history = useHistory()
     const dispatch = useDispatch()
     const [errors, setErrors] = useState([])
+    
+    const [rememberMe, setRememberMe] = useState(false)
+    const [open, setOpen] = useState(false);
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  }
     const [formData, setFormData] = useState({
       password: "",
       email: ""
@@ -81,7 +108,6 @@ function Login() {
 
     function handleSubmit(e){
         e.preventDefault()
-        
         fetch("http://localhost:3000/login",{
           method: "POST",
           headers:{
@@ -93,11 +119,13 @@ function Login() {
         .then((data) => {
           if (data.errors) {
             setErrors(data.errors);
+            
           } else {
             console.log(data)
             dispatch(setUser(data))
-            console.log(JSON.stringify(data))
-            localStorage.setItem('currentUser', JSON.stringify(data))
+            if(rememberMe){
+              localStorage.setItem('currentUser', JSON.stringify(data))
+            }
             history.push("/main");
           }
         })
@@ -108,7 +136,7 @@ function Login() {
     function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     }
-
+  console.log(errors.length > 0)
 
     return (
         <Grid container component="main" className={classes.root}>
@@ -122,7 +150,7 @@ function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate onSubmit={handleSubmit}>
+          <form className={classes.form}  onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -135,6 +163,9 @@ function Login() {
               autoFocus
               value={formData.email}
               onChange={handleChange}
+              error={errors.length > 0}
+              id="outlined-error-helper-text"
+              variant="outlined"
             />
             <TextField
               variant="outlined"
@@ -148,9 +179,13 @@ function Login() {
               autoComplete="current-password"
               value={formData.password}
               onChange={handleChange}
+              error={errors.length > 0}
+              id="outlined-error-helper-text"
+              helperText={errors}
+              variant="outlined"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox value="remember" color="primary" onChange={()=> setRememberMe(!rememberMe)}/>}
               label="Remember me"
             />
             <Button
@@ -162,9 +197,9 @@ function Login() {
             >
               Sign In
             </Button>
-            {errors.map((error) => (
+            {/* {errors.map((error) => (
               <p key={error}>{error}</p>
-             ))}
+             ))} */}
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
@@ -172,15 +207,27 @@ function Login() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" onClick={handleOpen}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
+             
             </Grid>
             <Box mt={5}>
               <Copyright />
             </Box>
           </form>
+          <Modal
+                open={open}
+                onClose={handleClose}
+                className={classes.modal}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+              >
+               {<div className={classes.modal_body}>
+                <Signup/>
+                 </div>}
+              </Modal>
         </div>
       </Grid>
     </Grid>

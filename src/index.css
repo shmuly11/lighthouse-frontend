@@ -21,3 +21,8 @@ code {
   padding: 10px;
   
 }
+
+.req-offers{
+  display: flex;
+  flex-direction: column;
+}

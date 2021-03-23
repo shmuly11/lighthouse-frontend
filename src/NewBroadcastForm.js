@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
+import {addRequest} from './redux/requestsSlice'
 // import 'date-fns';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
@@ -10,12 +11,14 @@ import {
 } from '@material-ui/pickers';
 
 function NewBroadcastForm() {
+
     const user = useSelector(state => state.user)
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const dispatch = useDispatch()
     const [formData, setFormData] = useState({
         member_id: user.id,
         title: "",
-        start_date: selectedDate.toString(),
+        start_date: new Date(),
         url: "",
         content: "",
         broadcast_id:1,
@@ -23,7 +26,9 @@ function NewBroadcastForm() {
     })
     
     const handleDateChange = (date) => {
+        console.log(date)
     setSelectedDate(date);
+    setFormData({...formData, start_date: date.toDateString()})
     }
 
     function handleSubmit(e){
@@ -36,8 +41,12 @@ function NewBroadcastForm() {
           },
           body: JSON.stringify(formData)
         })
+        .then(res=> res.json())
+        .then(data=> {
+            dispatch(addRequest(data))
+        })
     }
-
+    
     function handleChange(e){
         // console.log(e)
         setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -69,7 +78,7 @@ function NewBroadcastForm() {
         <input type="textarea" placeholder="content" name="content" onChange={handleChange}></input>
         <input type="submit"></input>
             </form>
-            {selectedDate.toString()}
+            {/* {selectedDate.toString()} */}
         </div>
     )
 }

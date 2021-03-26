@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import {removeOffer} from './redux/offersSlice'
 
 function OfferCard({offer}) {
+    console.log(offer)
     const dispatch= useDispatch()
 
     function handleDelete(){
@@ -13,8 +14,11 @@ function OfferCard({offer}) {
       }
     return (
         <div >
-            {offer.content}
-            <button onClick={handleDelete}>delete</button>
+            Helping {offer.helpeds[0].name}
+            <br></br>
+            With
+            <p>{offer.content}</p>
+            <button onClick={handleDelete}>delete offer</button>
         </div>
     )
 }

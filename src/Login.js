@@ -16,6 +16,7 @@ import {useHistory} from 'react-router-dom'
 import {GiLighthouse} from 'react-icons/gi'
 import { useSelector, useDispatch } from 'react-redux'
 import {setUser} from './redux/userSlice'
+import {setCommunity} from './redux/communitySlice'
 import Modal from '@material-ui/core/Modal';
 import Signup from "./Signup";
 
@@ -123,6 +124,7 @@ function Login() {
           } else {
             console.log(data)
             dispatch(setUser(data))
+            dispatch(setCommunity(data.communities[0]))
             if(rememberMe){
               localStorage.setItem('currentUser', JSON.stringify(data))
             }

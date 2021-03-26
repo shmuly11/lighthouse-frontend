@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import { useSelector, useDispatch } from 'react-redux'
 import {setUser} from './redux/userSlice'
+import {setCommunity} from './redux/communitySlice'
 import {useHistory} from 'react-router-dom'
 
 
@@ -16,6 +17,7 @@ import {useHistory} from 'react-router-dom'
 function Signup() {
   const dispatch = useDispatch()
   const history = useHistory()
+  const community = useSelector(state => state.community)
   const user = useSelector(state => state.user)
   const [communities, setCommunities] = useState([])
   const [value, setValue] = useState(0);
@@ -35,7 +37,7 @@ function Signup() {
   }, [])
 
   const displayCommunities = communities.map(community => {
-      return <button key={community.name} onClick={()=>handleCommunity(community.id)}> {community.name}</button>
+      return <button key={community.id} onClick={()=>handleCommunity(community.id)}> {community.name}</button>
   })
 
   function handleCommunity(id){
@@ -46,7 +48,13 @@ function Signup() {
         },
         body: JSON.stringify({member_id: user.id, community_id: id})
     })
-    .then(history.push("/main"))
+    .then((res)=>res.json())
+    .then(data => {
+        dispatch(setCommunity(data))
+        console.log("use", user.communities)
+        console.log("signup", community)
+        history.push("/main")
+    })
     
   }
 

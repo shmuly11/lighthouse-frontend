@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Date from './Date'
 import Location from './Location'
 import {
@@ -12,11 +12,14 @@ import {
   import RequestCard from './RequestCard'
   import {useSelector, useDispatch} from 'react-redux'
   import {addOffer} from './redux/offersSlice'
+  import Fade from 'react-reveal/Fade'
 
  
 
 function Request({request}) {
   const user = useSelector(state => state.user)
+  const [peopleNeeded, setPeopleNeeded] = useState(request.people - request.helpers.length)
+  const [helpers, setHelpers] = useState(request.helpers)
   const dispatch = useDispatch()
   const {id, assigned, content, end_date, start_date, location, member_name, time, url, member_id} = request
   const form = {
@@ -45,13 +48,15 @@ function Request({request}) {
      .then(data=>{
        console.log(data)
        dispatch(addOffer(data))
+       setPeopleNeeded((current) => current - 1)
+       setHelpers([...helpers, data.member])
      })
     }
    }
 
     const leadingActions = () => (
         <LeadingActions>
-          <SwipeAction onClick={handleAccept}>
+          <SwipeAction onClick={handleAccept} destructive={true}>
             Accept Offer
           </SwipeAction>
         </LeadingActions>
@@ -90,7 +95,11 @@ function Request({request}) {
                     leadingActions={leadingActions()}
                     trailingActions={trailingActions()}
                 >
-                    <RequestCard request={request}/>
+                    <Fade bottom opposite >
+                  <div className="glass-wrap">
+                    <RequestCard request={request} peopleNeeded={peopleNeeded} helpers={helpers}/>
+                  </div>
+                    </Fade>
                 </SwipeableListItem>
             </SwipeableList>
         </div>

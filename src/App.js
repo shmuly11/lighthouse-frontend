@@ -15,7 +15,11 @@ function App() {
         <Login/>
       </Route>
       <Route exact path="/main"> 
-        {user ? <Main/> : <Login />}
+        {user ? 
+        
+        <Main/> 
+        
+        : <Login />}
       </Route>
       <Route exact path="/new_template"> 
         {user ? <NewTemplateForm /> : <Login />}

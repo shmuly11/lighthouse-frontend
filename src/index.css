@@ -1,11 +1,130 @@
 body {
-  margin: 0;
+  /* margin: 0; */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 20px;
+  background-image: url("background.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover; 
+  /* width: auto;
+  height: auto; */
+  /* overflow: hidden; */
+  /* filter: blur(2px); */
+  /* box-shadow: 8px 8px 5px rgba(0, 0, 0, 0.3), inset 5px -5px 0px 5px rgba(200, 200, 200, 0.15), inset -2px -2px 0px 5px rgba(195, 195, 195, 0.15); */
+/*   
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(7px) saturate(160%) contrast(45%) brightness(140%) ;
+  -webkit-backdrop-filter: blur(3px) saturate(160%) contrast(45%) brightness(140%); */
 }
+
+#board {
+  border: 1rem solid transparent;
+  height: 30vw;
+  width: 70vw;
+  min-height: 675px;
+  min-width: 572px;
+  top: 7rem;
+  left: 15%;
+  /*max-width: 1500px;*/
+  /* background-image: url("1290818_subtleDesire_Canvas_Landscape.png");
+  background-size: cover; */
+  background-color: rgba(250, 244, 225, 0.658);
+  border-image-source: url("http://res.cloudinary.com/cspaveljb/image/upload/v1499110958/corkborder_f8cm3g.png");
+  border-image-slice: 31 29;
+  border-image-width: 31px 29px;
+  overflow: hidden;
+  position: absolute;
+  
+}
+
+.grid{
+  /* display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 2em;
+  justify-content: center;
+  margin-top: 1%;
+  margin-left: 4%;
+  grid-auto-flow: column; */
+  width: 100%;
+  height:645px; 
+  min-width: 100px;
+   max-width: 100%;
+   overflow-y: scroll;
+   /* margin: auto; */
+   margin-top: 1.1%;
+   margin-left: 35%;
+   scroll-margin: 20px;
+}
+
+#inner-board {
+  /*border: 2px dotted red;*/
+  /*min-height: 300px;*/
+  /* height: 93%;
+  overflow: auto;
+  overflow-x: visible; */
+  /*position: relative;*/
+}
+
+.glass-wrap {
+  /* background-image: url("https://images.unsplash.com/photo-1520547879102-279c51d3734c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1378&q=80");
+  background-repeat: no-repeat;
+  background-size: cover; */
+  width: 300px;
+  min-height: 200px;
+  height: auto;
+  overflow: hidden;
+  margin: 10px;
+  /* backdrop-filter: blur(1px); */
+  box-shadow: 8px 8px 5px rgba(0, 0, 0, 0.3), inset 5px -5px 0px 5px rgba(200, 200, 200, 0.15), inset -2px -2px 0px 5px rgba(195, 195, 195, 0.15);
+}
+.glass {
+  
+  
+  width: 100%;
+  height: 100%;
+  left: 4px;
+  top: 4px;
+  background: rgba(180, 180, 180, 0.3);
+  /* filter: blur(1px); */
+  z-index:999;
+}
+
+/* .glass-wrapper {
+  font-family:Arial;
+  width: 40%;
+  margin:0 auto;
+  overflow: hidden;
+  min-height: 400px;
+  padding:50px;
+  box-sizing:border-box;
+  background: #DF1922;
+  color: #fff;
+  border-radius:8px;
+  position: relative;
+}
+.content {
+  width: 100%;
+  box-sizing:border-box;
+  text-align: center;
+  font-size: 2em;
+  text-shadow: 1px 1px 1px #fff, 1px 1px 1px #000, 1px 1px 1px #ccc;
+}
+
+.glass {
+  width: 160%;
+  height: 316px;
+  opacity: .1;
+  background: #fff;
+  position: absolute;
+  top: -114px;
+  left: -200px;
+  z-index: 9;
+  border-radius: 50%;
+} */
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -13,19 +132,46 @@ code {
 }
 
 .request-list{
-  background-color: aqua;
-  border: aquamarine;
-  margin: auto;
-  width: 30%;
-  border: 1px solid green;
-  padding: 10px;
+  /* background-color: aqua; */
+  /* border: aquamarine; */
+  /* margin: auto;
+  width: 30%; */
+  /* border: 1px solid green; */
+  /* padding: 10px; */
   
 }
 
 .req-offers{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
+.login{
+  background-color: rgb(255, 255, 255);
+  background-image: url("logo_quotes.gif");
+  background-size: 70%;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  
+
+}
+
+.main{
+  position: relative;
+}
+
+.logout{
+  position: absolute;
+  top: -1rem;
+  right: -107rem;
+}
+
+.tabs{
+  position: absolute;
+  top: 4rem;
+  right: 43rem;
+  max-width: 600px;
+}
 
 

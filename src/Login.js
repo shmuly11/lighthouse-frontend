@@ -91,7 +91,7 @@ function Login() {
     const history = useHistory()
     const dispatch = useDispatch()
     const [errors, setErrors] = useState([])
-    
+    const community = useSelector(state => state.community)
     const [rememberMe, setRememberMe] = useState(false)
     const [open, setOpen] = useState(false);
 
@@ -123,11 +123,12 @@ function Login() {
             
           } else {
             console.log(data)
-            dispatch(setUser(data))
             dispatch(setCommunity(data.communities[0]))
+            dispatch(setUser(data))
             if(rememberMe){
               localStorage.setItem('currentUser', JSON.stringify(data))
             }
+            (console.log(community))
             history.push("/main");
           }
         })
@@ -143,7 +144,7 @@ function Login() {
     return (
         <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={false} sm={4} md={7} className="login" />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -204,9 +205,9 @@ function Login() {
              ))} */}
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                {/* <Link href="#" variant="body2">
                   Forgot password?
-                </Link>
+                </Link> */}
               </Grid>
               <Grid item>
                 <Link href="#" variant="body2" onClick={handleOpen}>

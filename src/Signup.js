@@ -25,9 +25,12 @@ function Signup() {
   const [formData, setFormData] = useState({
     name: "",
     age:"",
+    image: "",
     password: "",
     email: ""
   })
+  const [joinPassword, setJoinPassword] = useState("")
+  const [comErrors, setComErrors] = useState([])
 
   useEffect(() => {
       fetch('http://localhost:3000/communities')
@@ -37,10 +40,16 @@ function Signup() {
   }, [])
 
   const displayCommunities = communities.map(community => {
-      return <button key={community.id} onClick={()=>handleCommunity(community.id)}> {community.name}</button>
-  })
+      return (
+        <form onSubmit={(e)=>handleCommunity(e, community.id)}>
+        <input type="password" value={joinPassword} onChange={(e)=> setJoinPassword(e.target.value)}></input>
+        <button key={community.id} type="submit"> {community.name}</button>
+        </form>
+        )
+        })
 
-  function handleCommunity(id){
+  function handleCommunity(e, id){
+    e.preventDefault()
     fetch('http://localhost:3000/community_members',{
         method: "POST",
         headers:{
@@ -50,10 +59,15 @@ function Signup() {
     })
     .then((res)=>res.json())
     .then(data => {
-        dispatch(setCommunity(data))
+      if (data.errors) {
+        setComErrors(data.errors);
+        
+      } else {
+        dispatch(setCommunity(data.communities[data.communities.length - 1]))
         console.log("use", user.communities)
         console.log("signup", community)
         history.push("/main")
+      }
     })
     
   }
@@ -63,18 +77,25 @@ function Signup() {
   }
 
   function handleFormChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    
+    const value = e.target.type !== 'file' ? e.target.value : e.target.files[0]
+    setFormData({ ...formData, [e.target.name]: value });
     }
 
   function handleSignupSubmit(e){
 
       e.preventDefault()
+      const signUpFormData = new FormData()
+      signUpFormData.append("name", formData.name)
+      signUpFormData.append("age", formData.age)
+      signUpFormData.append("email", formData.email)
+      signUpFormData.append("password", formData.password)
+      signUpFormData.append("image", formData.image)
+
       fetch("http://localhost:3000/signup",{
           method: "POST",
-          headers:{
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formData)
+          
+          body: signUpFormData
         })
         .then(res => res.json())
         .then((data) => {
@@ -109,6 +130,7 @@ function Signup() {
               value={formData.name}
               onChange={handleFormChange}
             />
+            <input type='file' name='image'onChange={handleFormChange}></input>
             <TextField
               variant="outlined"
               margin="normal"
@@ -170,6 +192,9 @@ function Signup() {
         :
         <>
         {displayCommunities}
+        {comErrors.map((error) => (
+              <p key={error}>{error}</p>
+             ))}
         </>
         }
         <Paper square>

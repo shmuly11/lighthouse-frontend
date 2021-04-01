@@ -54,19 +54,19 @@ function NewTemplateForm() {
                 <input type="text" placeholder="name" name="name" onChange={handleChange}></input><br/>
                 <input type='color' name='color' onChange={handleChange}></input><br/>
                 <input type="checkbox" name="start_date" onChange={handleChange}/>
-                <label for="start_date"> Date </label><br/>
+                <label htmlFor="start_date"> Date </label><br/>
                 <input type="checkbox"  name="end_date" onChange={handleChange}/>
-                <label for="end_date"> End Date</label><br/>
+                <label htmlFor="end_date"> End Date</label><br/>
                 <input type="checkbox" name="time" onChange={handleChange}/>
-                <label for="time"> Time</label><br/><br/>
+                <label htmlFor="time"> Time</label><br/><br/>
                 <input type="checkbox" name="url" onChange={handleChange}/>
-                <label for="url"> Link</label>
+                <label htmlFor="url"> Link</label>
                 <input type="text" placeholder="set default link here" name="url" onChange={handleChange}></input><br/>
                 <input type="checkbox" name="location" onChange={handleChange}/>
-                <label for="location"> Location</label>
+                <label htmlFor="location"> Location</label>
                 <input type="text" placeholder="set default location here" name="location" onChange={handleChange}></input><br/>
                 <input type="number" name="people" value={formData.people} onChange={handleChange}/>
-                <label for="people"> Amount of people</label><br/><br/>
+                <label htmlFor="people"> Amount of people</label><br/><br/>
                 <input type="submit" value="Submit"/>
             </form>
         </div>

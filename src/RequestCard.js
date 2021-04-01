@@ -8,9 +8,12 @@ import Typography from '@material-ui/core/Typography';
 import {useSelector, useDispatch} from 'react-redux'
 import NewBroadcastForm from './NewBroadcastForm'
 import {removeRequest} from './redux/requestsSlice'
+import Avatar from '@material-ui/core/Avatar'
+import AvatarGroup from '@material-ui/lab/AvatarGroup'
 
 
-const useStyles = makeStyles({
+
+const useStyles = makeStyles((theme) =>({
   root: {
     minWidth: 275,
   },
@@ -25,18 +28,25 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
-});
+  small: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  } 
+}));
 
-export default function SimpleCard({request}) {
+
+
+export default function SimpleCard({request, peopleNeeded, helpers}) {
   const [formData, setFormData] = useState({
     ...request
   })
-  const {id, assigned, content, end_date, start_date, location, member_name, title, people, time, url, member_id} = formData
+  const {id, assigned, content, end_date, start_date, location, member_name, member_image, title, people, time, url, member_id} = formData
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
   const user = useSelector(state => state.user)
   const dispatch = useDispatch()
   const [editMode, setEditMode] = useState(false)
+console.log(request)
 
   function handleDelete(){
     fetch(`http://localhost:3000/request_offers/${id}`,{
@@ -46,7 +56,7 @@ export default function SimpleCard({request}) {
   }
 
   function handleChange(e){
-    // setformData({...formData, [e.target.name]: e.target.value})
+    const value = e.target.value || "1"
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
@@ -62,36 +72,48 @@ export default function SimpleCard({request}) {
     })
   }
 
+  const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(location)}`
+  
+  const helperImages= helpers.map(helper=>{
+    return <Avatar key={helper.id} alt={helper.name} src={helper.image} />
+  })
   return (
-    <Card className={classes.root} style={{color: "red", background: 'linear-gradient(180deg, #3577A0 60%, #FDAA62 100%)'}}>
+    <Card className="glass" style={{
+      color: "red", 
+      background: `linear-gradient(180deg, #3577A0 ${(people-helpers.length)/people * 100}%, #FDAA62 100%)`, 
+      'border-style': "solid",
+      'borer-width': '50px',
+      'border-color': request.broadcast.color
+      }}>
       <CardContent>
         {member_name && <Typography className={classes.title} color="textSecondary" gutterBottom>
           {member_name}
         </Typography>}
+        <Avatar alt={member_name} src={member_image} />
         {editMode ? 
         <form onSubmit={handleSubmit}>
           {title &&  <Typography className={classes.pos} color="textSecondary">
           <input type ="text" name="title" value={formData.title} onChange={handleChange}></input>
         </Typography>}
-          {start_date &&  <Typography className={classes.pos} color="textSecondary">
+          {request.start_date &&  <Typography className={classes.pos} color="textSecondary">
           <input type ="text" name="start_date" value={formData.start_date} onChange={handleChange}></input>
         </Typography>}
-        {end_date &&  <Typography className={classes.pos} color="textSecondary">
+        {request.end_date &&  <Typography className={classes.pos} color="textSecondary">
         <input type ="text" name="end_date" value={formData.end_date} onChange={handleChange}></input>
         </Typography>}
-        {time &&  <Typography className={classes.pos} color="textSecondary">
+        {request.time &&  <Typography className={classes.pos} color="textSecondary">
         <input type ="text" name="time" value={formData.time} onChange={handleChange}></input>
         </Typography>}
-        {url &&  <Typography className={classes.pos} color="textSecondary">
+        {request.url &&  <Typography className={classes.pos} color="textSecondary">
         <input type ="text" name="url" value={formData.url} onChange={handleChange}></input>
         </Typography>}
-        {people &&  <Typography className={classes.pos} color="textSecondary">
-        <input type ="number" name="people" value={formData.people} onChange={handleChange}></input>
+        {request.people &&  <Typography className={classes.pos} color="textSecondary">
+        <input type ="number" name="people" value={formData.people - helpers.length} onChange={handleChange}></input>
         </Typography>}
-        {location &&  <Typography className={classes.pos} color="textSecondary">
+        {request.location &&  <Typography className={classes.pos} color="textSecondary">
         <input type ="text" name="location" value={formData.location} onChange={handleChange}></input>
         </Typography>}
-       {content && <Typography variant="body2" component="p">
+       {request.content && <Typography variant="body2" component="p">
           <input type ="text" name="content" value={formData.content} onChange={handleChange}></input>
           
         </Typography>}
@@ -115,13 +137,14 @@ export default function SimpleCard({request}) {
           {time}
         </Typography>}
         {url &&  <Typography className={classes.pos} color="textSecondary">
-           <a href={url}>{url}</a>
+           <a href={url} target="_blank">{url}</a>
+           
         </Typography>}
         {people &&  <Typography className={classes.pos} color="textSecondary">
-          {people}
+          {peopleNeeded} {peopleNeeded === 1 ? "person" : "people"} needed
         </Typography>}
         {location &&  <Typography className={classes.pos} color="textSecondary">
-          {location}
+          <a href={mapsLink} target="_blank">{location}</a>
         </Typography>}
        {content && <Typography variant="body2" component="p">
           {content}
@@ -136,6 +159,9 @@ export default function SimpleCard({request}) {
         <Button size="small" onClick={handleDelete}>Delete</Button>
         </>}
       </CardActions>
+      <AvatarGroup>
+        {helperImages}
+      </AvatarGroup>
     </Card>
   );
 }

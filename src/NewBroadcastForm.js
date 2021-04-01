@@ -10,7 +10,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-function NewBroadcastForm() {
+function NewBroadcastForm({handleClose}) {
     
     const user = useSelector(state => state.user)
     const community = useSelector(state => state.community)
@@ -38,9 +38,23 @@ function NewBroadcastForm() {
     })
 
     function handleTemplateChange(e){
-        setTemplate(templates[e.target.value])
+        const currentTemp = templates[e.target.value]
+        setTemplate(currentTemp)
+        setFormData({
+            ...formData,
+            start_date: currentTemp.start_date !== "1" ? currentTemp.start_date : "",
+            end_date: currentTemp.end_date !== "1" ? currentTemp.end_date : "",
+            time: currentTemp.time !== "1" ? currentTemp.time : "",
+            url: currentTemp.url !== "1" ? currentTemp.url : "",
+            
+            people: currentTemp.people,
+            location: currentTemp.location !== "1" ? currentTemp.location : "",
+            broadcast_id: currentTemp.id
+
+        })
     }
     console.log(template)
+    console.log(formData)
     
     const handleDateChange = (date) => {
         console.log(date)
@@ -74,13 +88,16 @@ function NewBroadcastForm() {
         .then(res=> res.json())
         .then(data=> {
             dispatch(addRequest(data))
+            handleClose()
         })
     }
     
     function handleChange(e){
-        // console.log(e)
-        setFormData({ ...formData, [e.target.name]: e.target.value })
-        setTemplate({ ...template, [e.target.name]: e.target.value })
+        console.log(e.target.value)
+        const value = e.target.value || "1"
+        setFormData({ ...formData, [e.target.name]: value})
+        setTemplate({ ...template, [e.target.name]: value})
+        
     }
     return (
         <div>
@@ -134,7 +151,7 @@ function NewBroadcastForm() {
             </MuiPickersUtilsProvider>
             {template.url && <input type="text" placeholder="link" name="url" value={template.url !== "1" ? template.url : ""} onChange={handleChange}></input>}
             <input type="textarea" placeholder="content" name="content" onChange={handleChange}></input>
-            {template.people && <input type="number" placeholder="how many people" name="people" onChange={handleChange}></input>}
+             <input type="number" placeholder="how many people" name="people" value={template.people} onChange={handleChange}></input>
             {template.location && <input type="textarea" placeholder="location" name="location" value={template.location !== "1" ? template.location : ""} onChange={handleChange}></input>}
             <input type="submit"></input>
                 </form>

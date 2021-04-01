@@ -5,9 +5,9 @@ const communitySlice = createSlice({
   initialState: JSON.parse(localStorage.getItem('currentUser')) ? JSON.parse(localStorage.getItem('currentUser')).communities[0] : {},
   reducers: {
     setCommunity(state, action){
-        // console.log("state", state, action)
+        console.log("in state")
+        console.log(action.payload)
        return state = action.payload
-        // console.log(state)
     },
   }
 })
